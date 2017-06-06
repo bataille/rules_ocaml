@@ -19,8 +19,8 @@ Add the following to your `WORKSPACE` file.
 ```bzl
 git_repository(
     name = "io_bazel_rules_ocaml",
-    remote = "https://github.com/jin/rules_ocaml.git",
-    commit = "18685e1bc5ad22e425f502355087747a6638f51a",
+    remote = "https://github.com/bataille/rules_ocaml.git",
+    commit = "5b857f4b9b9c3c769b7228c0bb053a54fb1cfc9f",
 )
 
 load("@io_bazel_rules_ocaml//ocaml:ocaml.bzl", "ocaml_repositories")
