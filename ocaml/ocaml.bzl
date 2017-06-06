@@ -53,8 +53,12 @@ def _ocaml_binary_impl(ctx):
   if (len(ctx.attr.opam_packages) > 0):
     pkgs = "-pkgs " + " ".join(ctx.attr.opam_packages) + " -use-ocamlfind"
 
+  cflags = ""
+  if (len(ctx.attr.ocamlc_cflags) > 0):
+    cflags = "-cflags " + ",".join(ctx.attr.ocamlc_cflags) + " "
+
   mv_command = "&& cp -L %s %s" % (intermediate_bin, ctx.outputs.executable.path)
-  command = " ".join([ocamlbuild_bin, opts, pkgs, target_bin, mv_command])
+  command = " ".join([ocamlbuild_bin, opts, pkgs, cflags, target_bin, mv_command])
 
   ctx.action(
       inputs = ctx.files.srcs,
@@ -86,6 +90,7 @@ _ocaml_binary = rule(
             mandatory = False,
         ),
         "opam_packages": attr.string_list(mandatory = False),
+	"ocamlc_cflags": attr.string_list(mandatory = False),
         "bin_type": attr.string(default = "native"),
     } + _ocaml_toolchain_attrs,
     executable = True,
