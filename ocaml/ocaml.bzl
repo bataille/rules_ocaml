@@ -57,8 +57,12 @@ def _ocaml_binary_impl(ctx):
   if (len(ctx.attr.ocamlc_cflags) > 0):
     cflags = "-cflags " + ",".join(ctx.attr.ocamlc_cflags) + " "
 
+  ocamlbuild_tags = ""
+  if (len(ctx.attr.ocamlbuild_tags) > 0):
+    ocamlbuild_tags = "-tags " + ",".join(ctx.attr.ocamlbuild_tags) + " "
+
   mv_command = "&& cp -L %s %s" % (intermediate_bin, ctx.outputs.executable.path)
-  command = " ".join([ocamlbuild_bin, opts, pkgs, cflags, target_bin, mv_command])
+  command = " ".join([ocamlbuild_bin, opts, pkgs, ocamlbuild_tags, cflags, target_bin, mv_command])
 
   ctx.action(
       inputs = ctx.files.srcs,
@@ -90,6 +94,7 @@ _ocaml_binary = rule(
             mandatory = False,
         ),
         "opam_packages": attr.string_list(mandatory = False),
+	"ocamlbuild_tags": attr.string_list(mandatory = False),
 	"ocamlc_cflags": attr.string_list(mandatory = False),
         "bin_type": attr.string(default = "native"),
     } + _ocaml_toolchain_attrs,
